@@ -17,14 +17,21 @@ Cancelled := false
 x_skip_sy := 1370
 y_skip_sy := 789
 
-x_skip_ly := 1903
-y_skip_ly := 965
+; originally this tried to support full-screen - but skip that for now
+;x_skip_ly := 1903
+;y_skip_ly := 965
 
 x_yellow_sy := 231
 y_yellow_sy := 845
 
-x_yellow_ly := 237
-y_yellow_ly := 1024
+x_yellow_ly := 193
+y_yellow_ly := 893
+
+x_yellow_syMinus10 := 221
+y_yellow_syMinus10 := 845
+
+x_yellow_lyPlus100 := 293
+y_yellow_lyPlus100 := 893
 
 yellow_color := 0x00ccff
 
@@ -36,28 +43,39 @@ yellow_color := 0x00ccff
 
 	while (LookingForSkip = true)
 	{
+		MouseMove, %x_skip_sy%, %y_skip_sy%, 0
+		Sleep 100
+
+		MouseMove, %x_yellow_lyPlus100%, %y_yellow_lyPlus100%, 0
+		Sleep 100
 
 		; Move the mouse to x_yellow_sy, y_yellow_sy
-		PixelGetColor, PixColor, %x_yellow_sy%, %y_yellow_sy%
+		PixelGetColor, PixColor1, %x_yellow_sy%, %y_yellow_sy%
 		Sleep 100
-		MouseMove, %x_yellow_sy%, %y_yellow_sy%, 0
+		; Move the mouse to x_yellow_ly, y_yellow_ly
+		PixelGetColor, PixColor2, %x_yellow_ly%, %y_yellow_ly%
 		Sleep 100
 
-		if (%PixColor%=%yellow_color%)
+		MouseMove, %x_skip_sy%, %y_skip_sy%, 0
+		Sleep 100
+
+		if (PixColor1 = 0x00CCFF)
 		{
+			;MsgBox "Skipping"
+			Sleep 1000
+			MouseMove, %x_skip_sy%, %y_skip_sy%, 0
+			Sleep 250
+			MouseClick, right, %x_skip_sy%, %y_skip_sy%
+		}
+		if (PixColor2 = 0x00CCFF)
+		{
+			;MsgBox "Skipping"
+			Sleep 1000
+			MouseMove, %x_skip_sy%, %y_skip_sy%, 0
+			Sleep 250
 			MouseClick, right, %x_skip_sy%, %y_skip_sy%
 		}
 
-		; Move the mouse to x_yellow_ly, y_yellow_ly
-		PixelGetColor, PixColor, %x_yellow_ly%, %y_yellow_ly%
-		Sleep 100
-		MouseMove, %x_yellow_ly%, %y_yellow_ly%, 0
-		Sleep 100
-
-		if (%PixColor%=%yellow_color%)
-		{
-			MouseClick, right, %x_skip_ly%, %y_skip_ly%
-		}
 
 
 		; wait 5 seconds
@@ -67,6 +85,9 @@ yellow_color := 0x00ccff
 			curtime := curtime - 1
 			Sleep Seconds1
 		}
+		;MsgBox %PixColor1% %PixColor2%
+		MouseMove, %x_yellow_lyPlus100%, %y_yellow_lyPlus100%, 0
+		Sleep 100
 	
 	}
 	;MsgBox "exitting"
